@@ -1,34 +1,40 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.development';
 import { Theme } from './types/theme';
 import { Post } from './types/post';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ApiService {
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getThemes() {
-    const{appUrl} = environment
-    return  this.http.get<Theme[]>(`${appUrl}/themes`)
+    const { apiUrl } = environment;
+    return this.http.get<Theme[]>(`${apiUrl}/themes`);
   }
 
-  getTheme() {
-    const{appUrl} = environment
-    // return this.http.get<Theme>(`${appUrl}/themes/`) TODO implement later
+  getTheme(id: string) {
+    const { apiUrl } = environment;
+    return this.http.get<Theme>(`${apiUrl}/themes/${id}`);
   }
 
   createTheme(themeName: string, postText: string) {
-    return this.http.post<Theme>('/', {themeName, postText})
+    const { apiUrl } = environment;
+    const payload = { themeName, postText };
 
+    return this.http.post<Theme>(`${apiUrl}/themes`, payload);
   }
 
   getPosts(limit?: number) {
-    const{appUrl} = environment
-    const limitFilter = limit ? `?limit=${limit}` : '';
-    return  this.http.get<Post[]>(`${appUrl}/posts${limitFilter}`)
+    const { apiUrl } = environment;
+    let url = `${apiUrl}/posts`;
+
+    if (limit) {
+      url += `?limit=${limit}`;
+    }
+
+    return this.http.get<Post[]>(url);
   }
 }
