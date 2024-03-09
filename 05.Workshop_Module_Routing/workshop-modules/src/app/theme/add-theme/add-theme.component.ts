@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./add-theme.component.css']
 })
 export class AddThemeComponent {
-
+  
 }
