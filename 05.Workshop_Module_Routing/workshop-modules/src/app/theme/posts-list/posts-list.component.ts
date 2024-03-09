@@ -1,0 +1,42 @@
+import { Component, OnInit } from '@angular/core';
+import { ApiService } from 'src/app/api.service';
+import { Post } from 'src/app/types/post';
+
+
+@Component({
+  selector: 'app-posts-list',
+  templateUrl: './posts-list.component.html',
+  styleUrls: ['./posts-list.component.css'],
+})
+export class PostsListComponent implements OnInit {
+  posts: Post[] = [];
+  isLoading: boolean = true;
+
+  constructor(private api: ApiService) {}
+
+  ngOnInit(): void {
+    // this.api.getPosts(5).subscribe((posts) => {
+    //   console.log(posts);
+    //   this.posts = posts;
+
+    //   setTimeout(() => {
+    //     this.isLoading = false;
+    //   }, 2000);
+    // });
+
+    this.api.getPosts(5).subscribe({
+      next: (posts) => {
+        console.log(posts);
+        this.posts = posts;
+
+        setTimeout(() => {
+          this.isLoading = false;
+        }, 2000);
+      },
+      error: (err) => {
+        this.isLoading = false;
+        console.error('Error: ', err);
+      },
+    });
+  }
+}
